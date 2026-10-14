@@ -32,7 +32,7 @@ class AuthController extends Controller
 
     public function showRegister(): View
     {
-        register view('auth.register');
+        return view('auth.register');
     }
 
     public function register(RegisterRequest $request): RedirectResponse
@@ -51,7 +51,7 @@ class AuthController extends Controller
 
         return redirect()
             ->route('assets.index')
-            ->with('success', 'Conta criada com sucesso.')
+            ->with('success', 'Conta criada com sucesso.');
     }
 
     public function logout(): RedirectResponse
