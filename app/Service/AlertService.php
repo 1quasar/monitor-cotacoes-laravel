@@ -2,6 +2,11 @@
 
 namespace App\Service;
 
+use App\Mail\PriceAlertTriggered;
+use App\Models\PriceAlert;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+
 class AlertService
 {
     public function checkAlerts(): int
