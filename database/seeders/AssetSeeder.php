@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
-use Illuminate\Database\Seeder;
 use App\Models\Asset;
+use Illuminate\Database\Seeder;
 
 class AssetSeeder extends Seeder
 {
@@ -18,13 +17,13 @@ class AssetSeeder extends Seeder
                 'code' => 'USD',
                 'name' => 'Dólar Americano',
                 'type' => 'fiat',
-                'symbol' => '$',
+                'symbol' => '$'
             ],
             [
                 'code' => 'EUR',
                 'name' => 'Euro',
                 'type' => 'fiat',
-                'symbol' => '£',
+                'symbol' => '€',
             ],
             [
                 'code' => 'GBP',
@@ -38,12 +37,14 @@ class AssetSeeder extends Seeder
                 'type' => 'crypto',
                 'symbol' => '₿',
             ],
+
             [
                 'code' => 'ETH',
                 'name' => 'Ethereum',
                 'type' => 'crypto',
                 'symbol' => 'Ξ',
             ],
+
         ];
 
         foreach ($assets as $asset) {

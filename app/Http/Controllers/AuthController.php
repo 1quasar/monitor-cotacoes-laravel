@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Controller;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 
 class AuthController extends Controller
 {
@@ -11,59 +15,38 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
-    public function login(LoginRequest $request): RedirectResponse
+    public function login(Request $request): RedirectResponse
     {
-        $credentials = $request->validated();
-
-        if (!Auth::attempt($credentials)) {
-            return back()
-                ->withErrors([
-                    'email' => 'Email ou senha inválidos.',
-                ])
-                ->onlyInput('email');
-        }
-
-        $request->session()->regenerate();
-
-        return redirect()
-            ->intended(route('assets.index'))
-            ->with('success', 'Login realizado com sucesso.');
-    }
-
-    public function showRegister(): View
-    {
-        return view('auth.register');
-    }
-
-    public function register(RegisterRequest $request): RedirectResponse
-    {
-        $data = $request->validated();
-
-        $user = User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
+        $credentials = $request->validate([
+            'email' => ['required', 'email'],
+            'password'  => ['required', 'string'],
         ]);
 
-        Auth::login($user);
+        if (Auth::attempt([
+            'email' => $credentials['email'],
+            'password' => $credentials['password'],
+            'status' => true
+        ])) {
+            $request->session()->regenerate();
 
-        $request->session()->regenerate();
+            return redirect()->intended(route('assets.index'));
+        }
 
-        return redirect()
-            ->route('assets.index')
-            ->with('success', 'Conta criada com sucesso.');
+        return back()
+            ->withErrors([
+                'email' => 'E-mail ou senha inválidos.'
+            ])
+            ->onlyInput('email');
     }
 
-    public function logout(): RedirectResponse
+    public function logout(Request $request): RedirectResponse
     {
         Auth::logout();
 
-        request()->session()->invalidate();
+        $request->session()->invalidate();
 
-        request()->session()->regenerateToken();
+        $request->session()->regenerateToken();
 
-        return redirect()
-            ->route('login')
-            -with('success', 'Logout realizado com sucesso.');
+        return redirect()->route('login');
     }
 }
